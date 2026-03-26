@@ -59,7 +59,6 @@
 
     /* ── STAMPS ─────────────────────────────────── */
     .stamp {
-      display: inline-block;
       border: 2.5px solid var(--red);
       color: var(--red);
       font-family: 'Special Elite', cursive;
@@ -235,9 +234,8 @@
   <!--  NAVIGATION                                             -->
   <!-- ════════════════════════════════════════════════════════ -->
 
-  <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-    <div class="font-vt" style="color:var(--red); font-size:1.2rem; letter-spacing:0.06em;">[DFS&nbsp;v1.0]</div>
-    <div class="flex gap-8 font-elite" style="font-size:0.88rem; letter-spacing:0.09em;">
+  <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between w-full mt-8">
+    <div class="flex gap-8 flex-row items-center justify-center font-elite w-full" style="font-size:0.88rem; letter-spacing:0.09em;">
       <a href="#products" class="nav-link hover:text-red" style="transition:color 0.15s;">CATALOG</a>
       <a href="#tips"     class="nav-link hover:text-red" style="transition:color 0.15s;">TIPS</a>
       <a href="#why"      class="nav-link hover:text-red" style="transition:color 0.15s;">WHY NATIVE</a>
@@ -250,7 +248,7 @@
   <!--  HERO                                                   -->
   <!-- ════════════════════════════════════════════════════════ -->
 
-  <section class="max-w-5xl mx-auto px-6 pt-10 pb-6">
+  <section class="max-w-5xl mx-auto px-6 pt-6 pb-6">
     <div class="relative">
 
       <!-- Floating stamps (decorative, hidden on small screens) -->
@@ -269,7 +267,9 @@
 
         <!-- Rule -->
         <div class="font-vt mb-3 opacity-40" style="letter-spacing:0.25em; font-size:1.1rem;">
-          ════════════ ★ ════════════
+                    <div class="hidden md:block">
+            ════════════ ★ ════════════
+          </div>
         </div>
 
         <!-- Logotype -->
@@ -283,8 +283,10 @@
         </div>
 
         <!-- Rule -->
-        <div class="font-vt mb-4 opacity-40" style="letter-spacing:0.25em; font-size:1.1rem;">
-          ════════════ ★ ════════════
+        <div class="font-vt mb-4 opacity-40 " style="letter-spacing:0.25em; font-size:1.1rem;">
+          <div class="hidden md:block">
+            ════════════ ★ ════════════
+          </div>
         </div>
 
         <!-- Tagline -->
@@ -549,10 +551,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
         <!-- Left: story -->
-        <div class="reveal">
+        <div class="reveal text-center">
           <div class="font-vt opacity-45 mb-2" style="letter-spacing:0.3em; font-size:0.95rem;">─────── NO. 4 ───────</div>
           <h2 class="font-elite mb-4" style="font-size:2.6rem; letter-spacing:0.04em;">OUR STORY</h2>
-          <div class="space-y-4 text-sm leading-relaxed">
+          <div class="space-y-4 text-sm leading-relaxed text-left">
             <p>
               Darn Fine Software was founded on one simple principle:
               <strong>Linux users deserve software that was actually made for Linux.</strong>
@@ -611,11 +613,11 @@
                  onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)'" onmouseout="this.style.background='';this.style.color=''">
                 CODEBERG ↗
               </a>
-   <!--            <a href="#" class="box-dashed font-elite text-xs px-5 py-2 inline-block"
+               <a href="#" class="box-dashed font-elite text-xs px-5 py-2 inline-block"
                  style="letter-spacing:0.08em; transition:background 0.15s, color 0.15s;"
                  onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)'" onmouseout="this.style.background='';this.style.color=''">
                 MATRIX ↗
-              </a> -->
+              </a> 
             </div>
           </div> -->
 
