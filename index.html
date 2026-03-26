@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darn Fine Software — Apps for Linux</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=VT323&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f4efe4;
+      --ink:   #1c1c14;
+      --red:   #b91c1c;
+      --red-bg: rgba(185, 28, 28, 0.07);
+      --grid:  rgba(0, 0, 0, 0.055);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Courier Prime', 'Courier New', monospace;
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.018) 1px, transparent 1px);
+      background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+    }
+
+    /* ── FONT UTILITIES ─────────────────────────── */
+    .font-elite { font-family: 'Special Elite', cursive; }
+    .font-vt    { font-family: 'VT323', monospace; }
+
+    /* ── COLOR UTILITIES ────────────────────────── */
+    .text-red   { color: var(--red); }
+    .text-cream { color: var(--cream); }
+    .text-ink   { color: var(--ink); }
+    .bg-ink     { background-color: var(--ink); }
+    .bg-red     { background-color: var(--red); }
+    .bg-cream   { background-color: var(--cream); }
+
+    /* ── BOX STYLES ─────────────────────────────── */
+    .box-heavy {
+      border: 3px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .box-heavy-red {
+      border: 3px solid var(--red);
+      box-shadow: 5px 5px 0 var(--red);
+    }
+    .box-double { border: 3px double var(--ink); }
+    .box-dashed { border: 2px dashed var(--ink); }
+
+    /* ── STAMPS ─────────────────────────────────── */
+    .stamp {
+      display: inline-block;
+      border: 2.5px solid var(--red);
+      color: var(--red);
+      font-family: 'Special Elite', cursive;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.45rem;
+      opacity: 0.83;
+    }
+    .stamp-a { transform: rotate(-4deg); }
+    .stamp-b { transform: rotate(2.5deg); }
+    .stamp-c { transform: rotate(-1.5deg); }
+    .stamp-ink {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    /* ── TICKER ─────────────────────────────────── */
+    .ticker-wrap { overflow: hidden; white-space: nowrap; }
+    .ticker-track {
+      display: inline-block;
+      animation: ticker 50s linear infinite;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── PRODUCT CARDS ──────────────────────────── */
+    .product-card {
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      cursor: default;
+    }
+    .product-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0 var(--ink) !important;
+    }
+
+    /* ── BLINK CURSOR ───────────────────────────── */
+    .cursor-blink::after {
+      content: '█';
+      animation: blink 1.2s step-end infinite;
+      font-family: 'VT323', monospace;
+      color: var(--red);
+      font-size: 0.9em;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── SCROLL REVEAL ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal.in-d1 { transition-delay: 0.10s; }
+    .reveal.in-d2 { transition-delay: 0.20s; }
+    .reveal.in-d3 { transition-delay: 0.30s; }
+    .reveal.in-d4 { transition-delay: 0.40s; }
+    .reveal.in-d5 { transition-delay: 0.50s; }
+
+    /* ── DIVIDERS ───────────────────────────────── */
+    hr.ink    { border-top: 2px solid var(--ink); }
+    hr.ink-sm { border-top: 1px solid rgba(0,0,0,0.18); }
+    hr.red    { border-top: 2px solid var(--red); }
+
+    .stripe-divider {
+      height: 12px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--ink),   var(--ink)   4px,
+        var(--cream), var(--cream) 12px
+      );
+    }
+    .stripe-divider-red {
+      height: 8px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--red), var(--red) 3px,
+        transparent, transparent 9px
+      );
+    }
+    .stripe-divider-inv {
+      height: 12px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--cream), var(--cream) 4px,
+        var(--ink),   var(--ink)   12px
+      );
+    }
+
+    /* ── DARK SECTIONS ──────────────────────────── */
+    .dark-section {
+      background-color: var(--ink);
+      color: var(--cream);
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* ── TIP BOX ────────────────────────────────── */
+    .tip-box {
+      border-left: 5px solid var(--red);
+      background: rgba(185, 28, 28, 0.10);
+    }
+
+    /* ── NAV UNDERLINE HOVER ────────────────────── */
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      height: 2px; width: 0;
+      background: var(--red);
+      transition: width 0.2s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── ASCII ART ──────────────────────────────── */
+    .ascii-tux {
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      line-height: 1.15;
+      white-space: pre;
+      opacity: 0.45;
+    }
+
+    /* ── SCROLLBAR ──────────────────────────────── */
+    ::-webkit-scrollbar       { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--ink); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+    /* ── MISC ───────────────────────────────────── */
+    a { color: inherit; text-decoration: none; }
+    pre { margin: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  TICKER BAR                                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <div class="bg-ink text-cream py-1.5 ticker-wrap font-vt" style="font-size:1.1rem; letter-spacing:0.06em;">
+    <div class="ticker-track">
+      <span class="mx-8">★ NATIVE GTK4 APPLICATIONS FOR LINUX</span>
+      <span class="mx-8">☆ NO ELECTRON WAS HARMED IN THE MAKING OF THIS SOFTWARE</span>
+      <span class="mx-8">★ 100% COMPILED — ZERO BUNDLED WEB BROWSERS</span>
+      <span class="mx-8">☆ DARN FINE SOFTWARE — FOR THE DISCERNING LINUX USER</span>
+      <span class="mx-8">★ AVAILABLE ON: LINUX (SOMETIMES PALM OS)</span>
+      <span class="mx-8">☆ YOUR RAM WILL THANK YOU</span>
+      <span class="mx-8">☆ DARK MODE THAT ACTUALLY WORKS</span>
+
+      <span class="mx-8">★ NATIVE GTK4 APPLICATIONS FOR LINUX</span>
+      <span class="mx-8">☆ NO ELECTRON WAS HARMED IN THE MAKING OF THIS SOFTWARE</span>
+      <span class="mx-8">★ 100% COMPILED — ZERO BUNDLED WEB BROWSERS</span>
+      <span class="mx-8">☆ DARN FINE SOFTWARE — FOR THE DISCERNING LINUX USER</span>
+      <span class="mx-8">★ AVAILABLE ON: LINUX (SOMETIMES PALM OS)</span>
+      <span class="mx-8">☆ YOUR RAM WILL THANK YOU</span>
+      <span class="mx-8">☆ DARK MODE THAT ACTUALLY WORKS</span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  NAVIGATION                                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="font-vt" style="color:var(--red); font-size:1.2rem; letter-spacing:0.06em;">[DFS&nbsp;v1.0]</div>
+    <div class="flex gap-8 font-elite" style="font-size:0.88rem; letter-spacing:0.09em;">
+      <a href="#products" class="nav-link hover:text-red" style="transition:color 0.15s;">CATALOG</a>
+      <a href="#tips"     class="nav-link hover:text-red" style="transition:color 0.15s;">TIPS</a>
+      <a href="#why"      class="nav-link hover:text-red" style="transition:color 0.15s;">WHY NATIVE</a>
+      <a href="#about"    class="nav-link hover:text-red" style="transition:color 0.15s;">ABOUT</a>
+    </div>
+  </nav>
+
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  HERO                                                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section class="max-w-5xl mx-auto px-6 pt-10 pb-6">
+    <div class="relative">
+
+      <!-- Floating stamps (decorative, hidden on small screens) -->
+      <div class="absolute top-[100px] left-[50px] hidden md:block stamp stamp-a">Linux Only!</div>
+      <div class="absolute top-12 right-10 hidden md:block stamp stamp-b stamp-ink">GTK4 Native</div>
+      <div class="absolute bottom-8 right-[50px] hidden md:block stamp stamp-c" style="font-size:0.58rem;">Tux Approved</div>
+
+      <!-- Main hero box -->
+      <div class="box-double p-8 md:p-12 text-center relative" style="background: rgba(244,239,228,0.75);">
+
+        <!-- Corner ornaments -->
+        <span class="absolute top-2 left-3 font-vt opacity-30" style="font-size:1.4rem;">✦</span>
+        <span class="absolute top-2 right-3 font-vt opacity-30" style="font-size:1.4rem;">✦</span>
+        <span class="absolute bottom-2 left-3 font-vt opacity-30" style="font-size:1.4rem;">✦</span>
+        <span class="absolute bottom-2 right-3 font-vt opacity-30" style="font-size:1.4rem;">✦</span>
+
+        <!-- Rule -->
+        <div class="font-vt mb-3 opacity-40" style="letter-spacing:0.25em; font-size:1.1rem;">
+          ════════════ ★ ════════════
+        </div>
+
+        <!-- Logotype -->
+        <h1 class="font-elite leading-none mb-3" style="font-size: clamp(2.5rem, 8vw, 5.5rem); letter-spacing:0.04em;">
+          DARN FINE <span class="text-red">SOFTWARE</span>
+        </h1>
+
+        <!-- Sub-banner -->
+        <div class="inline-block bg-ink text-cream font-vt px-6 py-1 mb-3" style="font-size:1.05rem; letter-spacing:0.18em;">
+          NATIVE APPLICATIONS FOR LINUX
+        </div>
+
+        <!-- Rule -->
+        <div class="font-vt mb-4 opacity-40" style="letter-spacing:0.25em; font-size:1.1rem;">
+          ════════════ ★ ════════════
+        </div>
+
+        <!-- Tagline -->
+        <p class="font-elite max-w-xl mx-auto mb-5" style="font-size:1.1rem; line-height:1.65;">
+          Pretty fast & pretty good looking native Linux software.<br>
+          <span class="text-red">No subscriptions. (Usually) no memory leaks.</span>
+        </p>
+
+        <!-- ASCII Tux -->
+        <div class="flex justify-center mb-6">
+          <div class="ascii-tux text-center">    .~.
+    /V\
+   // \\
+  /(   )\
+   ^`~'^</div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap gap-4 justify-center mb-5">
+          <a href="#products"
+             class="box-heavy bg-ink text-cream font-elite px-8 py-3 inline-block"
+             style="letter-spacing:0.1em; font-size:0.95rem; transition:background 0.15s, color 0.15s;"
+             onmouseover="this.style.background='var(--red)'" onmouseout="this.style.background='var(--ink)'">
+            VIEW CATALOG →
+          </a>
+          <a href="#about"
+             class="box-heavy font-elite px-8 py-3 inline-block"
+             style="letter-spacing:0.1em; font-size:0.95rem; transition:background 0.15s, color 0.15s;"
+             onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)'" onmouseout="this.style.background='';this.style.color=''">
+            OUR STORY
+          </a>
+        </div>
+
+        <div class="font-vt opacity-40" style="font-size:0.95rem;">
+          * Satisfaction guaranteed, or we'll feel genuinely bad about it.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  STATS BAR                                              -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section class="dark-section py-0 mt-4">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4" style="border: 1px solid rgba(255,255,255,0.08);">
+
+        <div class="text-center py-7 px-4" style="border-right:1px solid rgba(255,255,255,0.08);">
+          <div class="font-vt mb-1 text-red" style="font-size:2.6rem;">0</div>
+          <div class="font-elite text-xs opacity-70" style="letter-spacing:0.1em;">ELECTRON APPS</div>
+        </div>
+
+        <div class="text-center py-7 px-4" style="border-right:1px solid rgba(255,255,255,0.08);">
+          <div class="font-vt mb-1 text-red" style="font-size:2.6rem;">100%</div>
+          <div class="font-elite text-xs opacity-70" style="letter-spacing:0.1em;">NATIVE GTK4</div>
+        </div>
+
+        <div class="text-center py-7 px-4" style="border-right:1px solid rgba(255,255,255,0.08);">
+          <div class="font-vt mb-1 text-red" style="font-size:2.6rem;">Pretty Fast</div>
+          <div class="font-elite text-xs opacity-70" style="letter-spacing:0.1em;">STARTUP TIME</div>
+        </div>
+
+        <div class="text-center py-7 px-4">
+          <div class="font-vt mb-1 text-red" style="font-size:2.6rem;">1</div>
+          <div class="font-elite text-xs opacity-70" style="letter-spacing:0.1em;">SUPPORTED OS</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  PRODUCTS CATALOG                                       -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section id="products" class="max-w-5xl mx-auto px-6 py-16">
+
+    <div class="text-center mb-10 reveal">
+      <div class="font-vt opacity-45 mb-2" style="letter-spacing:0.3em; font-size:0.95rem;">─────── NO. 1 ───────</div>
+      <h2 class="font-elite mb-2" style="font-size:2.6rem; letter-spacing:0.04em;">THE CATALOG</h2>
+      <p class="max-w-md mx-auto" style="font-size:0.9rem; opacity:0.7; line-height:1.6;">
+        We sell premium software at fair prices. Pay once, own forever. We'll even give you the source code!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- #DFS-001 Outliner -->
+      <div class="product-card box-dashed p-5 reveal in-d4" style="background:rgba(244,239,228,0.45); opacity:0.68;">
+        <div class="flex items-start justify-between mb-3">
+          <span class="font-vt opacity-45" style="font-size:0.85rem;">#DFS-006</span>
+          <span class="stamp stamp-b stamp-ink">Soon™</span>
+        </div>
+        <div style="font-size:2rem; margin-bottom:0.25rem; opacity:0.4;">𐇲</div>
+        <h3 class="font-elite text-2xl mb-0.5 opacity-60" style="letter-spacing:0.04em;">OUTLINER</h3>
+        <div class="font-vt opacity-40 mb-3" style="font-size:0.9rem; letter-spacing:0.12em;">PRODUCTIVITY</div>
+        <hr class="ink-sm mb-3" style="opacity:0.4;">
+        <p class="text-sm leading-relaxed mb-4 opacity-60">
+          Coming soon! An outlining app that goes as deep as you need. Customizable, fast, built with the OPML file format.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="font-vt text-xs px-2 py-0.5 opacity-35" style="border:1px dashed var(--ink);">GTK4</span>
+          <span class="font-vt text-xs px-2 py-0.5 opacity-35" style="border:1px dashed var(--ink);">In Development</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  TIPS & TIDBITS                                         -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section id="tips">
+    <div class="stripe-divider"></div>
+    <div class="dark-section py-14">
+      <div class="max-w-5xl mx-auto px-6">
+
+        <div class="text-center mb-10 reveal">
+          <div class="font-vt opacity-40 mb-2" style="letter-spacing:0.3em; font-size:0.95rem;">─────── NO. 2 ───────</div>
+          <h2 class="font-elite mb-2" style="font-size:2.6rem; letter-spacing:0.04em;">TIPS &amp; TIDBITS</h2>
+          <p class="opacity-55" style="font-size:0.88rem;">Free advice from people who should probably charge more for it.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <div class="tip-box p-5 reveal in-d1">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #1</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">GTK4 apps start faster</strong> than web-wrapped apps because they
+              don't need to boot an entire browser before showing you a button.
+              Truly revolutionary technology.
+            </p>
+          </div>
+
+          <div class="tip-box p-5 reveal in-d2">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #2</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">Your system font settings actually work</strong> with our apps.
+              We know! Incredible! That's what "native" means and we're not going
+              to stop being smug about it.
+            </p>
+          </div>
+
+          <div class="tip-box p-5 reveal in-d3">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #3</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">Accessibility just works.</strong>
+              Screen readers, high-contrast mode, keyboard navigation —
+              GTK4 handles it, and we don't fight it.
+              Good software is software for everyone.
+            </p>
+          </div>
+
+          <div class="tip-box p-5 reveal in-d4">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #4</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">Memory usage under 50 MB</strong> per app, most of the time.
+              We know this because we checked. With
+              <span class="font-vt" style="font-size:1.05rem;">htop</span>.
+              Like real Linux users.
+            </p>
+          </div>
+
+          <div class="tip-box p-5 reveal in-d2">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #5</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">Dark mode is a first-class citizen.</strong>
+              Not an afterthought. Not a CSS filter. Proper libadwaita adaptive colours
+              that switch when you toggle your system theme at 2 am.
+            </p>
+          </div>
+
+          <div class="tip-box p-5 reveal in-d3">
+            <div class="font-vt mb-2 text-red" style="font-size:1.05rem; letter-spacing:0.12em;">TIP #6</div>
+            <p class="text-sm leading-relaxed text-cream">
+              <strong class="font-elite">In Chinese, Pandas are called "bear cats".</strong>
+              A XiongMao (Bear Cat) is a Panda in China. In Taiwan, reverse the words to MaoXiong to get Panda. In China, MaoXiong is also the name of a cat, thanks to the owner of Darn Fine Software.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="stripe-divider-inv"></div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  WHY NATIVE                                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section id="why" class="max-w-5xl mx-auto px-6 py-16">
+
+    <div class="text-center mb-12 reveal">
+      <div class="font-vt opacity-45 mb-2" style="letter-spacing:0.3em; font-size:0.95rem;">─────── NO. 3 ───────</div>
+      <h2 class="font-elite mb-2" style="font-size:2.6rem; letter-spacing:0.04em;">
+        WHY <span class="text-red">NATIVE</span>?
+      </h2>
+      <p class="max-w-sm mx-auto" style="font-size:0.9rem; opacity:0.7;">
+        We have opinions. Strong ones. Lovingly expressed in table form.
+      </p>
+    </div>
+
+    <div class="box-double overflow-hidden reveal">
+
+      <!-- Header row -->
+      <div class="grid grid-cols-3 bg-ink text-cream">
+        <div class="p-4 font-elite" style="font-size:0.85rem; letter-spacing:0.08em; border-right:1px solid rgba(255,255,255,0.15);">CRITERION</div>
+        <div class="p-4 font-elite text-center text-red" style="font-size:0.85rem; letter-spacing:0.08em; border-right:1px solid rgba(255,255,255,0.15);">NATIVE GTK4</div>
+        <div class="p-4 font-elite text-center opacity-55" style="font-size:0.85rem; letter-spacing:0.08em;">ELECTRON *</div>
+      </div>
+
+      <!-- Data rows -->
+      <div class="grid grid-cols-3" style="border-bottom:1px solid var(--ink);">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">Startup Time</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">FAST ★</div>
+        <div class="p-4 text-center font-vt opacity-45 relative" style="font-size:1.15rem;">
+          <svg class="mx-auto size-5 animate-spin text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3" style="border-bottom:1px solid var(--ink);">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">RAM Usage</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">NOT MUCH ★</div>
+        <div class="p-4 text-center font-vt opacity-45" style="font-size:1.15rem;">~300 MB</div>
+      </div>
+
+      <div class="grid grid-cols-3" style="border-bottom:1px solid var(--ink);">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">System Theme</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">YES ★</div>
+        <div class="p-4 text-center font-vt opacity-45" style="font-size:1.15rem;">How about some CSS?</div>
+      </div>
+
+      <div class="grid grid-cols-3" style="border-bottom:1px solid var(--ink);">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">Accessibility</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">BUILT IN ★</div>
+        <div class="p-4 text-center font-vt opacity-45" style="font-size:1.15rem;">What's that?</div>
+      </div>
+
+      <div class="grid grid-cols-3" style="border-bottom:1px solid var(--ink);">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">Bundled Browser</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">NOPE ★</div>
+        <div class="p-4 text-center font-vt opacity-45" style="font-size:1.15rem;">You like Chrome right?</div>
+      </div>
+
+      <div class="grid grid-cols-3">
+        <div class="p-4 font-elite text-sm" style="border-right:2px solid var(--ink); background:rgba(0,0,0,0.025);">Feels Like Linux</div>
+        <div class="p-4 text-center font-vt text-red" style="font-size:1.15rem; border-right:1px solid rgba(0,0,0,0.12);">ABSOLUTELY ★</div>
+        <div class="p-4 text-center font-vt opacity-45" style="font-size:1.15rem;">feels like a website</div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  ABOUT                                                  -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <section id="about" class="py-12 mb-4">
+    <div class="stripe-divider-red max-w-5xl mx-auto mb-12 mx-6"></div>
+    <div class="max-w-5xl mx-auto px-6">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+        <!-- Left: story -->
+        <div class="reveal">
+          <div class="font-vt opacity-45 mb-2" style="letter-spacing:0.3em; font-size:0.95rem;">─────── NO. 4 ───────</div>
+          <h2 class="font-elite mb-4" style="font-size:2.6rem; letter-spacing:0.04em;">OUR STORY</h2>
+          <div class="space-y-4 text-sm leading-relaxed">
+            <p>
+              Darn Fine Software was founded on one simple principle:
+              <strong>Linux users deserve software that was actually made for Linux.</strong>
+            </p>
+            <p>
+              We got tired of apps that looked like they'd been teleported from a web browser,
+              refused to respect our font settings, and consumed enough RAM to run a small
+              European nation's accounting department.
+            </p>
+            <p>
+              So we sat down, learned GTK4, drank a truly unreasonable amount of coffee,
+              and started building things properly.
+            </p>
+            <p>
+              Every app we ship is <strong>native, compiled, and designed to feel at home</strong>
+              on your desktop. We follow the HIG. We test with screen readers. We care about
+              the details everyone else decided weren't worth caring about.
+            </p>
+            <p class="font-elite" style="font-size:1.05rem;">
+              <em>"If it's not darn fine, we don't ship it."</em><br>
+              <span class="text-red font-elite" style="font-size:0.9rem; font-style:normal;">
+                — Our motto, and also a high bar we occasionally miss and then fix in patch releases.
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: boxes -->
+        <div class="space-y-5 reveal in-d2">
+
+          <!-- Manifesto -->
+          <div class="box-heavy-red p-5">
+            <h3 class="font-elite text-xl mb-3 text-red" style="letter-spacing:0.06em;">WE BELIEVE IN:</h3>
+            <div class="space-y-2 text-sm leading-relaxed">
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>Native apps that respect your system</span></div>
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>Premium, polished applications</span></div>
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>Owning your data</span></div>
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>Tinkering with the code</span></div>
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>One time licenses, no subscriptions</span></div>
+              <div class="flex gap-2"><span class="text-red font-vt">✦</span><span>Free as in speech</span></div>
+            </div>
+          </div>
+
+          <!-- Get involved -->
+<!--           <div class="box-dashed p-5">
+            <h3 class="font-elite text-lg mb-2" style="letter-spacing:0.06em;">GET INVOLVED</h3>
+            <p class="text-sm mb-4 opacity-70 leading-relaxed">
+              All our code lives on Codeberg. File bugs, submit patches, or just star
+              the repos to make us feel good about ourselves.
+            </p>
+            <div class="flex gap-3">
+              <a href="#" class="box-heavy font-elite text-xs px-5 py-2 inline-block"
+                 style="letter-spacing:0.08em; transition:background 0.15s, color 0.15s;"
+                 onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)'" onmouseout="this.style.background='';this.style.color=''">
+                CODEBERG ↗
+              </a>
+   <!--            <a href="#" class="box-dashed font-elite text-xs px-5 py-2 inline-block"
+                 style="letter-spacing:0.08em; transition:background 0.15s, color 0.15s;"
+                 onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)'" onmouseout="this.style.background='';this.style.color=''">
+                MATRIX ↗
+              </a> -->
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!--  FOOTER                                                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <footer class="dark-section">
+    <div class="stripe-divider" style="background: repeating-linear-gradient(-45deg, var(--red), var(--red) 4px, var(--ink) 4px, var(--ink) 12px);"></div>
+    <div class="max-w-5xl mx-auto px-6 py-10">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+
+        <div>
+          <h3 class="font-elite text-xl mb-3 text-red" style="letter-spacing:0.06em;">DARN FINE SOFTWARE</h3>
+          <p class="text-sm opacity-55 leading-relaxed mb-3">
+            Makers of quality applications for the Linux desktop.
+            Located in Ohio.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-elite text-lg mb-3 opacity-75" style="letter-spacing:0.09em;">CATALOG</h3>
+          <div class="font-vt opacity-55 space-y-1" style="font-size:1.05rem; line-height:1.5;">
+            <div>→ OUTLINER (Coming Soon)</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-elite text-lg mb-3 opacity-75" style="letter-spacing:0.09em;">IMPORTANT NOTICES</h3>
+          <div class="space-y-2 text-xs opacity-45 leading-relaxed">
+            <p>† Not available on Windows. This is a feature.</p>
+            <p>‡ Not available on macOS. See above.</p>
+            <p>§ "GTK4" is a trademark of the GNOME Project, whom we admire greatly.</p>
+            <p>¶ "Linux" is a trademark of Linus Torvalds, whom we also admire greatly.</p>
+            <p>"Darn" is an exclamation of mild frustration, used here with genuine affection.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <hr style="border-top:1px solid rgba(255,255,255,0.1); margin-bottom:1.25rem;">
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-3">
+        <div class="font-vt opacity-35 text-sm" style="letter-spacing:0.07em;">
+          © DARN FINE SOFTWARE LLC. — ALL RIGHTS RESERVED
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-triggered reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
